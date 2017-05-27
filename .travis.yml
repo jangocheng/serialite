@@ -1,5 +1,19 @@
 dist: trusty
 
+notifications:
+  email: false
+
+# enable "Build pushes" and "Build pull requests" in Travis CI
+# - pull requests will always be built
+# - only build pushes to master
+branches:
+  only:
+    - master
+
+# install Bazel dependencies
+# - openjdk8
+# - pkg-config
+# - gcc/g++ 5
 language: java
 
 jdk:
@@ -8,6 +22,8 @@ jdk:
 addons:
   apt:
     sources:
+      # ubuntu-toolchain-r-test: aliased to ppa:ubuntu-toolchain-r/test
+      # https://github.com/travis-ci/apt-source-whitelist/blob/b00325d3ef5c5d463d3c98e1d21a65f2702503f1/ubuntu.json#L368
       - ubuntu-toolchain-r-test
     packages:
       - wget
@@ -16,7 +32,9 @@ addons:
       - g++-5
 
 before_install:
+  # download Bazel
   - wget https://github.com/bazelbuild/bazel/releases/download/0.5.0/bazel_0.5.0-linux-x86_64.deb
+  # install Bazel
   - sudo dpkg -i bazel_0.5.0-linux-x86_64.deb
 
 script:
